@@ -1,3 +1,6 @@
+import autoprefixer from '/lib/autoprefixer.es';
+
+
 const RE_PRE_STYLE_POST = /^([\s\S]*?)(<style[^>]*>[\s\S]+<\/style>)([\s\S]*)$/m;
 const RE_EACH_STYLE = /([\s\S]*?)(<style[^>]*>)([\s\S]+?)(<\/style>)([\s\S]*?)/gm;
 
@@ -18,7 +21,9 @@ export function responseFilter(req, res) {
                     let str = preStylePostMatch[1]; // pre
                     let matches;
                     while ((matches = RE_EACH_STYLE.exec(preStylePostMatch[2]))) { // style
-                        let css = matches[3];
+                        log.info(`css:${JSON.stringify(matches[3], null, 4)}`);
+                        const css = autoprefixer(matches[3]);
+                        log.info(`prefixedCss:${JSON.stringify(css, null, 4)}`);
                         str += `${matches[1]}${matches[2]}${css}${matches[4]}${matches[5]}`;
                     }
                     str += preStylePostMatch[3]; // post
