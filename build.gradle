@@ -13,7 +13,7 @@
 
 plugins {
     id 'java' // Needed for assemble and build
-    //id 'maven' // NOT needed for publishToMavenLocal!
+    id 'maven' // Needed for uploadArchives!
     id 'maven-publish' // Needed for publishToMavenLocal!
     id 'com.enonic.defaults' version '1.0.3'
     id 'com.enonic.xp.base' version '1.0.15' // Found here https://github.com/enonic/lib-admin-ui/blob/master/build.gradle
@@ -80,4 +80,9 @@ publishing {
             from components.java
         }
     }
+    /*repositories { // TODO: Probably not needed for uploadArchives?
+        maven {
+            url 'http://repo.enonic.net/artifactory/public'
+        }
+    }*/
 }
