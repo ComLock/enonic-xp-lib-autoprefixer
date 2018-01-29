@@ -5,6 +5,7 @@ module.exports = {
 
     globals: {
       app: false,
+      Java: false,
       log: false,
       resolve: false,
       __: false

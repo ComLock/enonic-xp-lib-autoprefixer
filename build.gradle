@@ -1,5 +1,20 @@
+/*buildscript { // all buildscript {} blocks must appear before any plugins {} blocks in the script
+    repositories {
+        mavenLocal() // NOT Needed for publishToMavenLocal!
+        jcenter()
+
+        //xp.enonicRepo() // Don't know xp before after plugins
+        maven {
+            url 'http://repo.enonic.com/public'
+        }
+    } // buildscript.repositories
+} // buildscript*/
+
+
 plugins {
     id 'java' // Needed for assemble and build
+    //id 'maven' // NOT needed for publishToMavenLocal!
+    id 'maven-publish' // Needed for publishToMavenLocal!
     id 'com.enonic.defaults' version '1.0.3'
     id 'com.enonic.xp.base' version '1.0.15' // Found here https://github.com/enonic/lib-admin-ui/blob/master/build.gradle
     //id 'com.enonic.xp.run' version '1.0.11' // Just for apps?
@@ -8,6 +23,7 @@ plugins {
 
 
 repositories {
+    //mavenLocal() // NOT needed for publishToMavenLocal!
     jcenter()
     xp.enonicRepo()
 }
@@ -48,9 +64,20 @@ sourceSets {
 task webpack(type:NodeTask) {
     script = file('node_modules/.bin/webpack')
     args = [
+        '--color',
         '--config', 'webpack.3.server.config.babel.js'
     ]
 }
 webpack.dependsOn npmInstall
 assemble.dependsOn webpack
 assemble.mustRunAfter webpack
+
+
+// Needed for publishToMavenLocal!
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
