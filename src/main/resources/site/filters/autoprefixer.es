@@ -13,10 +13,7 @@ const RE_PRE_STYLE_POST = /^([\s\S]*?)(<style[^>]*>[\s\S]+<\/style>)([\s\S]*)$/m
 const RE_EACH_STYLE = /([\s\S]*?)(<style[^>]*>)([\s\S]+?)(<\/style>)([\s\S]*?)/gm;
 
 
-export function responseFilter(req, res) {
-    //log.info(`res.pageContributions:${JSON.stringify(res.pageContributions, null, 4)}`);
-    if (!res.pageContributions) { return res; }
-    const startTime = currentTimeMillis();
+function modifyRes(res) {
     Object.keys(res.pageContributions).forEach((groupKey) => {
         if (Array.isArray(res.pageContributions[groupKey])) {
             res.pageContributions[groupKey].join('\n');
@@ -52,12 +49,23 @@ export function responseFilter(req, res) {
             }
         }
     }); // forEach group
-    const endTime = currentTimeMillis();
+}
+
+
+export function responseFilter(req, res) {
     if (initStartTime) {
-        log.info(`Filter autoprefixer init took ${endTime - initStartTime}ms`);
+        log.info(`Filter autoprefixer init took ${currentTimeMillis() - initStartTime}ms`);
         initStartTime = null; // Only show on first run.
-    } else {
+    }
+    //log.info(`res.pageContributions:${JSON.stringify(res.pageContributions, null, 4)}`);
+    if (!res.pageContributions) { return res; }
+    if (req.params.profiling) {
+        const startTime = currentTimeMillis();
+        modifyRes(res);
+        const endTime = currentTimeMillis();
         log.info(`Filter autoprefixer took ${endTime - startTime}ms`);
+    } else {
+        modifyRes(res);
     }
     return res;
 } // export function responseFilter
