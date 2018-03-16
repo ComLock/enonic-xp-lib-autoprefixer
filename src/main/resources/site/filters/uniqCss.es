@@ -4,9 +4,9 @@ let initStartTime = currentTimeMillis();
 import {concat} from '/lib/enonic/autoprefixer/concat'; // eslint-disable-line import/first
 
 
-function modifyRes(res) {
+function modifyRes(res, {debug}) {
     Object.keys(res.pageContributions).forEach((groupKey) => {
-        res.pageContributions[groupKey] = concat(res.pageContributions[groupKey]);
+        res.pageContributions[groupKey] = concat(res.pageContributions[groupKey], {debug});
     });
 }
 
@@ -20,11 +20,11 @@ export function responseFilter(req, res) {
     if (!res.pageContributions) { return res; }
     if (req.params.profiling) {
         const startTime = currentTimeMillis();
-        modifyRes(res);
+        modifyRes(res, {debug: req.params.debug});
         const endTime = currentTimeMillis();
         log.info(`Filter autoprefixer took ${endTime - startTime}ms`);
     } else {
-        modifyRes(res);
+        modifyRes(res, {debug: req.params.debug});
     }
     return res;
 } // export function responseFilter
