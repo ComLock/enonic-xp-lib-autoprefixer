@@ -20,26 +20,23 @@ const RE_EACH_STYLE = /([\s\S]*?)(<style[^>]*>)([\s\S]+?)(<\/style>)([\s\S]*?)/g
 
 
 function processStr({
-    str,
-    retArr,
-    styleArr,
-    debug = false
+    str, retArr, styleArr/*, debug = false*/
 }) {
     let preStylePostMatch;
     if ((preStylePostMatch = RE_PRE_STYLE_POST.exec(str))) {
-        debug && log.info(`preStylePostMatch:${JSON.stringify(preStylePostMatch, null, 4)}`);
+        //debug && log.info(`preStylePostMatch:${JSON.stringify(preStylePostMatch, null, 4)}`);
         let matches;
         let surround = preStylePostMatch[1];
         while ((matches = RE_EACH_STYLE.exec(preStylePostMatch[2]))) {
-            debug && log.info(`matches:${JSON.stringify(matches, null, 4)}`);
-            debug && log.info(`matches[3]:${JSON.stringify(matches[3], null, 4)}`);
+            //debug && log.info(`matches:${JSON.stringify(matches, null, 4)}`);
+            //debug && log.info(`matches[3]:${JSON.stringify(matches[3], null, 4)}`);
             styleArr.push(matches[3].trim()); // Remove newlines from start or end.
             surround += `${matches[1]}${matches[5]}`;
         } // while
-        debug && log.info(`styleArr:${JSON.stringify(styleArr, null, 4)}`);
+        //debug && log.info(`styleArr:${JSON.stringify(styleArr, null, 4)}`);
         surround += preStylePostMatch[3];
         if (surround) { retArr.push(surround); }
-        debug && log.info(`retArr:${JSON.stringify(retArr, null, 4)}`);
+        //debug && log.info(`retArr:${JSON.stringify(retArr, null, 4)}`);
     } else { // if exec
         retArr.push(str);
     }
@@ -59,36 +56,34 @@ export function uniqCss(str) {
 } // export function uniqCss
 
 
-export function concat(entry, {
-    debug = false
-} = {}) {
+export function concat(entry/*, {debug = false} = {}*/) {
     if (!entry) { return null; }
     const retArr = [];
     const styleArr = [];
     if (typeof entry === 'string') {
         processStr({
-            str: entry, retArr, styleArr, debug
+            str: entry, retArr, styleArr//, debug
         });
         if (styleArr) {
-            debug && log.info(`styleArr:${JSON.stringify(styleArr, null, 4)}`);
+            //debug && log.info(`styleArr:${JSON.stringify(styleArr, null, 4)}`);
             retArr.push(`<style type="text/css">
 ${uniqCss(styleArr.join('\n'))}
 </style>`);
         }
         const retStr = retArr.join('\n');
-        debug && log.info(`retStr:${JSON.stringify(retStr, null, 4)}`);
+        //debug && log.info(`retStr:${JSON.stringify(retStr, null, 4)}`);
         return retStr;
     }
     if (Array.isArray(entry)) {
         entry.forEach(str => processStr({
-            str, retArr, styleArr, debug
+            str, retArr, styleArr//, debug
         }));
         if (styleArr) {
             retArr.push(`<style type="text/css">
 ${uniqCss(styleArr.join('\n'))}
 </style>`);
         }
-        debug && log.info(`retArr:${JSON.stringify(retArr, null, 4)}`);
+        //debug && log.info(`retArr:${JSON.stringify(retArr, null, 4)}`);
         return retArr;
     } // if array
     throw new Error(`Entry not of type string or array! entry:${JSON.stringify(entry, null, 4)}`);
