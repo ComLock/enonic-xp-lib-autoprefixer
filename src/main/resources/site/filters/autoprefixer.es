@@ -16,7 +16,7 @@ const RE_EACH_STYLE = /([\s\S]*?)(<style[^>]*>)([\s\S]+?)(<\/style>)([\s\S]*?)/g
 function modifyRes(res) {
     Object.keys(res.pageContributions).forEach((groupKey) => {
         if (Array.isArray(res.pageContributions[groupKey])) {
-            res.pageContributions[groupKey].join('\n');
+            res.pageContributions[groupKey] = res.pageContributions[groupKey].join('\n');
         }
         if (typeof res.pageContributions[groupKey] !== 'string') {
             log.warning(`pageContributions.${groupKey} not array or string! ${JSON.stringify(res.pageContributions[groupKey], null, 4)}`);
