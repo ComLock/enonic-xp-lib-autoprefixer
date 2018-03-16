@@ -100,7 +100,7 @@ const WEBPACK_CONFIG = [
         context,
         devtool,
         entry: {
-            'lib/enonic/autoprefixer': './lib/enonic/autoprefixer.es'
+            'lib/enonic/autoprefixer': './lib/enonic/autoprefixer.es',
         },
         module,
         node: {
@@ -115,23 +115,24 @@ const WEBPACK_CONFIG = [
             ])
         ],
         stats
-    }, { // 2. Then the filter with lib as external
+    }, { // 2. Then the filter with lib as external and other bundles that doesn't require polyfills
         context,
         devtool,
         entry: {
-            'site/filters/autoprefixer': './site/filters/autoprefixer.es'
+            'site/filters/autoprefixer': './site/filters/autoprefixer.es',
+            'site/filters/uniqCss': './site/filters/uniqCss.es'
         },
         externals: [
             /^\/lib\/enonic\/autoprefixer.js$/
         ],
         module,
         output,
-        /*resolve: {
+        resolve: {
             alias: {
                 '/lib': path.resolve(__dirname, SRC_DIR, 'lib')
             },
             extensions: ['.es', '.js', '.json']
-        }, // resolve*/
+        },
         stats
     }
 ];
