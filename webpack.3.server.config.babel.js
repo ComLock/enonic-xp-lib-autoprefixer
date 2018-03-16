@@ -61,9 +61,9 @@ const module = {
                 compact: false,
                 minified: false,
                 plugins: [
-                    /*'array-includes',
-                    'optimize-starts-with',*/
-                    'transform-object-assign', // Needed somewhere :)
+                    'array-includes', // Used in concat
+                    'optimize-starts-with', // Used in concat
+                    'transform-object-assign' // Used many places
                     //'transform-object-rest-spread'
                 ],
                 presets: [
@@ -100,7 +100,7 @@ const WEBPACK_CONFIG = [
         context,
         devtool,
         entry: {
-            'lib/enonic/autoprefixer': './lib/enonic/autoprefixer.es',
+            'lib/enonic/autoprefixer': './lib/enonic/autoprefixer.es'
         },
         module,
         node: {
