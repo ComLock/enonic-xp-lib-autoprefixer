@@ -19,18 +19,25 @@ const EXPECTED_ARR = [
     `multiline string with various
 stuffall over the place`,
     'another string without style element',
-    '<style type="text/css">a b c</style>'
+    `<style type="text/css">
+a
+b
+c
+</style>`
 ];
 
 const EXPECTED_STR = `multiline string with various
 stuffall over the place
-<style type="text/css">b c</style>`;
+<style type="text/css">
+b
+c
+</style>`;
 
 describe('concat', () => {
-    it('array', () => {
-        deepStrictEqual(concat(TEST_ARR), EXPECTED_ARR);
-    });
     it('string', () => {
         deepStrictEqual(concat(TEST_STR), EXPECTED_STR);
+    });
+    it('array', () => {
+        deepStrictEqual(concat(TEST_ARR), EXPECTED_ARR);
     });
 });
